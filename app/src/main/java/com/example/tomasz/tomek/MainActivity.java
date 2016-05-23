@@ -50,37 +50,9 @@ public class MainActivity extends AppCompatActivity implements PrefsFragment.OnF
 
 
 
-    }public static void openAppRating(Context context) {
-        Intent rateIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName()));
-        boolean marketFound = false;
-
-        // find all applications able to handle our rateIntent
-        final List<ResolveInfo> otherApps = context.getPackageManager().queryIntentActivities(rateIntent, 0);
-        for (ResolveInfo otherApp: otherApps) {
-            // look for Google Play application
-            if (otherApp.activityInfo.applicationInfo.packageName.equals("com.android.vending")) {
-
-                ActivityInfo otherAppActivity = otherApp.activityInfo;
-                ComponentName componentName = new ComponentName(
-                        otherAppActivity.applicationInfo.packageName,
-                        otherAppActivity.name
-                );
-                rateIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-                rateIntent.setComponent(componentName);
-                context.startActivity(rateIntent);
-                marketFound = true;
-                break;
-
-            }
-        }
-
-        // if GP not present on device, open web browser
-        if (!marketFound) {
-            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id="+context.getPackageName()));
-            context.startActivity(webIntent);
-        }
+         }
     }
-
+//dodawanie pozycji do panelu navigacyjnego wraz z edycja 
     private void addDrawerItems() {
         String[] osArray = { "General Info","Settings","Additional battery info","Upgrade to PRO", "About" };
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
@@ -115,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements PrefsFragment.OnF
                         break;
                     }
                     case 3: {
-                        // final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                        // final String appPackageName = getPackageName(); 
                         objFragment = new fragmentMain();
                         openAppRating(getApplicationContext());
 
@@ -138,23 +110,22 @@ public class MainActivity extends AppCompatActivity implements PrefsFragment.OnF
     private void setupDrawer() {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
 
-            /**
-             * Called when a drawer has settled in a completely open state.
-             */
+           
+             //otwarcie panelu
+             
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
 
                 //getSupportActionBar().setTitle("BatteryWidget");
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu();
             }
 
-            /**
-             * Called when a drawer has settled in a completely closed state.
-             */
+            //zamkniecie panelu
+             
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 //getSupportActionBar().setTitle(mActivityTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu(); 
             }
         };
         mDrawerToggle.setDrawerIndicatorEnabled(true);
@@ -163,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements PrefsFragment.OnF
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
+        // odczyt menu
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
@@ -171,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements PrefsFragment.OnF
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
     }
     @Override
@@ -181,14 +151,12 @@ public class MainActivity extends AppCompatActivity implements PrefsFragment.OnF
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+       //sprawdzenie czy klik na action barze
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        
 
-        // Activate the navigation drawer toggle
+      // uruchomienie navigation drawera
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
